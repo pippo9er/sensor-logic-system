@@ -38,26 +38,15 @@
         	require 'config.php';
         	
             if(isset($_POST['aggiungere'])===true){
-            	$cf = $_POST['cf'];
-                $cognome= $_POST['cognome'];
-                $nome= $_POST['nome'];
-                $sesso= $_POST['sesso'];
-                $telefono= $_POST['telefono'];
-                $datadinascita= $_POST['datadinascita'];
-                $citta=$_POST['citta'];
-                $indirizzo=$_POST['indirizzo'];
-                $numcivico= $_POST['numcivico'];
-                $provincia= $_POST['provincia'];
-                $cap= $_POST['cap'];
-                $email = $_POST['email'];
+            	
                 $today= getdate();
-                $dataregistrazione= $today['year'].'-'.$today['mon'].'-'.$today['mday'];
                 
-            	$query = sprintf("insert into utente (cf, cognome, nome, sesso, telefono, datadinascita, citta, indirizzo, numcivico, provincia, cap, dataregistrazione) values ('".$cf."','".$cognome."','".$nome."','".$sesso."','".$telefono."','".$datadinascita."','".$citta."','".$indirizzo."','".$numcivico."','".$provincia."',".$cap.",'".$dataregistrazione."')");
+                
+            	$query = sprintf("insert into utente (cf, cognome, nome, sesso, telefono, datadinascita, citta, indirizzo, numcivico, provincia, cap, dataregistrazione) values ('".$_POST['cf']."','".$_POST['cognome']."','".$_POST['nome']."','".$_POST['sesso']."','".$_POST['telefono']."','".$_POST['datadinascita']."','".$_POST['citta']."','".$_POST['indirizzo']."','".$_POST['numcivico']."','".$_POST['provincia']."',".$_POST['cap'].",'".$today['year'].'-'.$today['mon'].'-'.$today['mday']."')");
                 $conn = new mysqli($servername, $user, $pass, $database);
                 $result = $conn->query($query);
                 if($result !== false) {
-                	$query = sprintf("select id from utente where cf ='".$cf."'");
+                	$query = sprintf("select id from utente where cf ='".$_POST['cf']."'");
                 	$result = $conn->query($query);
                     $row = mysqli_fetch_row($result);
                     $id= $row[0];
@@ -69,11 +58,11 @@
        					$pass[] = $alphabet[$n];
    					}
    					$psw = implode($pass);
-                    $query = sprintf("insert into credenziale (email, password, permesso, utente) values ('".$email."','".$psw."','t',".$id.')');
+                    $query = sprintf("insert into credenziale (email, password, permesso, utente) values ('".$_POST['email']."','".$psw."','t',".$id.')');
                     $result = $conn->query($query);
                     if($result !== false) {
                     	$mailregistrazione= new QueryRegistrazioneUtente();
-                        $mailregistrazione->reginviomail($email, $psw, $csrf);
+                        $mailregistrazione->reginviomail($_POST['email'], $psw, $csrf);
                     } else {
                     	$query = sprintf("delete from utente where cf='".$_POST['cf']."'");
                         $conn->query($query);
