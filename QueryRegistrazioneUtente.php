@@ -1,13 +1,8 @@
 <?php
 class QueryRegistrazioneUtente{
-	function regut($email,$psw, $id, $result, $send, $cf){
-    				require 'config.php';
-                    require 'constants.php';
-                    $conn = new mysqli($servername, $user, $pass, $database);
-    				$query = sprintf("insert into credenziale (email, password, permesso, utente) values ('".$email."','".$psw."','t',".$id.')');
-                    $result = $conn->query($query);
-                    if($result !== false) {
-                    	$str = '<span class="filtra">Registrazione riuscita</span>';
+	function reginviomail($email,$psw, $csrf){
+    
+    		$str = '<span class="filtra">Registrazione riuscita</span>';
                         echo $str;
                         $nome_mittente = 'SensorLogicSystem';
                         $mail_mittente = 'sensorlogicsystem@gmail.com';
@@ -30,11 +25,6 @@ class QueryRegistrazioneUtente{
                         	$str = '<br /><span class="filtra">'."Invio dell'e-mail non riuscito".'</span>';
                             echo $str;
                         }
-                    } else {
-                    	$query = sprintf("delete from utente where cf='".$cf."'");
-                        $conn->query($query);
-                    	$str = '<span class="filtra">Registrazione non riuscita</span>';
-                        echo $str;
-                    }
     }
+    				
 }

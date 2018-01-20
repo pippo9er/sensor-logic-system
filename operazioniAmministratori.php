@@ -1,21 +1,9 @@
 <?php
-    include_once 'Layout.php';
-	require 'config.php';
-    require 'nocsrf.php';
-    require 'constants.php';
-	$csrf = new nocsrf();
-    $conn = '';
-	session_start();
-    $email = $_SESSION['email'];
-    $password = $_SESSION['password'];
-    $query = sprintf("SELECT * FROM credenziale where email='".$email."' and password='".$password."'");
-    if($conn === '') {
-    	$conn = new mysqli($servername, $user, $pass, $database);
-	}
-    $result = $conn->query($query);
-    if($result === false || $result->num_rows !== 1){
-    	    header('Location: http://sensorlogicsystemlogin.altervista.org/index.php');
-    }
+	
+	include_once 'Autenticazione.php';
+    
+	$autentica= new Autenticazione();
+    $autentica-> autenticazione();
 ?>
 <!DOCTYPE html>
 <html>
@@ -31,12 +19,18 @@
     	<br />
     	<span class="visClient">Registrare un nuovo amministratore</span><br /><br /><br />
         <?php
+        require 'nocsrf.php';
+    	require 'constants.php';
+        include_once 'Layout.php';
+        include_once 'QueryRegistrazioneUtente.php';
+        $csrf = new nocsrf();
         $layout = new Layout();
         echo $layout->layoutop(htmlspecialchars($_POST['nome']), htmlspecialchars($_POST['cognome']), htmlspecialchars($_POST['cf']), htmlspecialchars($_POST['sesso']), htmlspecialchars($_POST['telefono']), htmlspecialchars($_POST['email']), htmlspecialchars($_POST['datadinascita']));
         echo $layout->layoubot(htmlspecialchars($_POST['cap']), htmlspecialchars($_POST['citta']), htmlspecialchars($_POST['indirizzo']), htmlspecialchars($_POST['numcivico']), htmlspecialchars($_POST['provincia']));
         ?>
         
         <?php
+        
         	require 'config.php';
         	
             if(isset($_POST['aggiungere'])===true){
@@ -74,29 +68,8 @@
                     $query = sprintf("insert into credenziale (email, password, permesso, utente) values ('".$email."','".$psw."','a',".$id.')');
                     $result = $conn->query($query);
                     if($result !== false) {
-                    	$str = '<span class="filtra">Registrazione riuscita</span>';
-                        echo $str;
-                        $nome_mittente = 'SensorLogicSystem';
-                        $mail_mittente = 'sensorlogicsystem@gmail.com';
-                        $mail_oggetto = 'Benvenuto/a nella nostra azienda';
-                        $mail_headers = 'From: ' .  $nome_mittente . ' <' .  $mail_mittente . '>\r\n';
-                        $mail_headers .= 'Reply-To: ' .  $mail_mittente . '\r\n';
-                        $mail_corpo = 'Gentile cliente, la ringraziamo per averci scelto. Ecco di seguito le sue credenziali per poter accedere ai suoi servizi. Password: '.$psw;
-
-                        $regexemail = '/^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,3})$/';
-						$send = false;
-                        if (preg_match($regexemail, $email) === 1) {
-                        	if($csrf->check(CSRF, $_POST, false, SIZE, true) === true){
-                        		$send = mail($email, $mail_oggetto, $mail_corpo, $mail_headers);
-                            }
-                        }
-                        if($send === true){
-                        	$str = '<br /><span class="filtra">E-mail inviata al cliente</span>';
-                            echo $str;
-                        } else {
-                        	$str = '<br /><span class="filtra">'."Invio dell'e-mail non riuscito".'</span>';
-                            echo $str;
-                        }
+                    	$mailregistrazione= new QueryRegistrazioneUtente();
+                        $mailregistrazione->reginviomail($email, $psw, $csrf);
                     } else {
                     	$query = sprintf("delete from utente where cf='".$_POST['cf']."'");
                         $conn->query($query);
@@ -479,21 +452,11 @@
                         <td><input class="inputfiltro2" type="text" placeholder="Provincia" id="provincia2" name="provincia2" maxlength="2"
                          value="<?php
                             	require 'config.php';
+                                include_once 'Recuperare.php';
+                                $query=sprintf('SELECT * FROM utente inner join credenziale on id=utente WHERE id='.$_POST['id2']." and permesso='a'");
+                            	$recuperare= new Recuperare();
+                                $recuperare-> recovery($query,$_POST['salvare'], $_POST['provincia2'], $_POST['recuperare'] );
                                 
-                            	if(isset($_POST['recuperare'])===true){
-                                	$query=sprintf('SELECT * FROM utente inner join credenziale on id=utente WHERE id='.$_POST['id2']." and permesso='a'");
-                					$conn = new mysqli($servername, $user, $pass, $database);
-                					$result = $conn->query($query);
-                                    if($result->num_rows === 1) {
-                                    	$row = mysqli_fetch_row($result);
-                   						echo $row[DIECI];
-                                    }
-                                } else{if(isset($_POST['salvare'])===true) {
-                                	$provincia=$_POST['provincia2'];
-                            		if(isset($provincia)===true){
-                            			echo $provincia;
-                           	 		}
-                                }}
                        		?>" pattern= "[A-Za-z]{0,2}" title="Deve contenere 2 lettere" required/></td>
                     </tr>
                 </tbody>
