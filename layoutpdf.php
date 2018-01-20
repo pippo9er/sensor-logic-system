@@ -1,7 +1,6 @@
 <?php
 
-require 'constants.php';
-require 'fpdf.php';
+require 'loadfile.php';
 
 class PDF extends FPDF
 {

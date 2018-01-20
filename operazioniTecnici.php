@@ -36,43 +36,14 @@
         
         <?php
         	require 'config.php';
-        	
+        	include_once 'QueryRegistrazioneUtente.php';
             if(isset($_POST['aggiungere'])===true){
             	
-                $today= getdate();
+               $today= getdate();
+                $csrf= new nocsrf();
+            	$aggiungiamm= new QueryRegistrazioneUtente();
+                $aggiungiamm->addutente($_POST['cf'],$_POST['cognome'],$_POST['nome'],$_POST['sesso'],$_POST['telefono'],$_POST['datadinascita'],$_POST['citta'],$_POST['indirizzo'],$_POST['numcivico'],$_POST['provincia'],$_POST['cap'],$today['year'].'-'.$today['mon'].'-'.$today['mday'], $_POST['email'], $csrf);
                 
-                
-            	$query = sprintf("insert into utente (cf, cognome, nome, sesso, telefono, datadinascita, citta, indirizzo, numcivico, provincia, cap, dataregistrazione) values ('".$_POST['cf']."','".$_POST['cognome']."','".$_POST['nome']."','".$_POST['sesso']."','".$_POST['telefono']."','".$_POST['datadinascita']."','".$_POST['citta']."','".$_POST['indirizzo']."','".$_POST['numcivico']."','".$_POST['provincia']."',".$_POST['cap'].",'".$today['year'].'-'.$today['mon'].'-'.$today['mday']."')");
-                $conn = new mysqli($servername, $user, $pass, $database);
-                $result = $conn->query($query);
-                if($result !== false) {
-                	$query = sprintf("select id from utente where cf ='".$_POST['cf']."'");
-                	$result = $conn->query($query);
-                    $row = mysqli_fetch_row($result);
-                    $id= $row[0];
-                    $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
-   					$pass = array();
-    				$alphaLength = strlen($alphabet) - 1;
-    				for ($i = ZERO; $i < OTTO; $i++) {
-       	 				$n = rand(0, $alphaLength);
-       					$pass[] = $alphabet[$n];
-   					}
-   					$psw = implode($pass);
-                    $query = sprintf("insert into credenziale (email, password, permesso, utente) values ('".$_POST['email']."','".$psw."','t',".$id.')');
-                    $result = $conn->query($query);
-                    if($result !== false) {
-                    	$mailregistrazione= new QueryRegistrazioneUtente();
-                        $mailregistrazione->reginviomail($_POST['email'], $psw, $csrf);
-                    } else {
-                    	$query = sprintf("delete from utente where cf='".$_POST['cf']."'");
-                        $conn->query($query);
-                    	$str = '<span class="filtra">Registrazione non riuscita</span>';
-                        echo $str;
-                    }
-                } else {
-                	$str = '<span class="filtra">Registrazione non riuscita</span>';
-                    echo $str;
-                }
             }
         ?>
    

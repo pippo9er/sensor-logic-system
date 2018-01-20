@@ -1,5 +1,7 @@
 <?php
+
 class QueryRegistrazioneUtente{
+
 	function reginviomail($email,$psw, $csrf){
     
     		$str = '<span class="filtra">Registrazione riuscita</span>';
@@ -25,6 +27,44 @@ class QueryRegistrazioneUtente{
                         	$str = '<br /><span class="filtra">'."Invio dell'e-mail non riuscito".'</span>';
                             echo $str;
                         }
+    }
+    
+    function addutente($cf, $cognome, $nome, $sesso, $telefono, $datadinascita, $citta, $indirizzo, $numcivico, $provincia, $cap, $dataregistrazione, $email, $csrf){
+   				require 'config.php';
+                
+                $query = sprintf("insert into utente (cf, cognome, nome, sesso, telefono, datadinascita, citta, indirizzo, numcivico, provincia, cap, dataregistrazione) values ('".$cf."','".$cognome."','".$nome."','".$sesso."','".$telefono."','".$datadinascita."','".$citta."','".$indirizzo."','".$numcivico."','".$provincia."',".$cap.",'".$dataregistrazione."')");
+               	            
+            	$conn = new mysqli($servername, $user, $pass, $database);
+                $result = $conn->query($query);
+                if($result !== false) {
+               
+                	$query = sprintf("select id from utente where cf = '".$cf."'");
+                	$result = $conn->query($query);
+                    $row = mysqli_fetch_row($result);
+                    $id= $row[0];
+                    $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+   					$pass = array();
+    				$alphaLength = strlen($alphabet) - 1;
+    				for ($i = ZERO; $i < OTTO; $i++) {
+       	 				$n = rand(0, $alphaLength);
+       					$pass[] = $alphabet[$n];
+   					}
+   					$psw = implode($pass);
+                    $query = sprintf("insert into credenziale (email, password, permesso, utente) values ('".$email."','".$psw."','a',".$id.')');
+                    $result = $conn->query($query);
+                    if($result !== false) {
+                    	$mailregistrazione= new QueryRegistrazioneUtente();
+                        $mailregistrazione->reginviomail($email, $psw, $csrf);
+                    } else {
+                    	$query = sprintf("delete from utente where cf='".$cf."'");
+                        $conn->query($query);
+                    	$str = '<span class="filtra">Registrazione non riuscita</span>';
+                        echo $str;
+                    }
+                } else {
+                	$str = '<span class="filtra">Registrazione non riuscita</span>';
+                    echo $str;
+                }
     }
     				
 }

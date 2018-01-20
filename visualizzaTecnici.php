@@ -35,11 +35,11 @@
                     	require 'config.php';
 						$conn = '';
                         $query = '';
-                        $id=$_POST['id'];
-                        $nome=$_POST['nome'];
-                        $cognome=$_POST['cognome'];
-                        $email=$_POST['email'];
-                        $citta=$_POST['città'];
+                        $id=htmlspecialchars($_POST['id']);
+                        $nome=htmlspecialchars($_POST['nome']);
+                        $cognome=htmlspecialchars($_POST['cognome']);
+                        $email=htmlspecialchars($_POST['email']);
+                        $citta=htmlspecialchars($_POST['città']);
                          $layoutS= new Layout();
                         $stampa = '';
                         if($stampa === '') {
@@ -62,7 +62,7 @@
                         }                  
                         
                         $tabquery= new QueryVisualizzaUtente();
-                        $result= $tabquery->tablequery($result);
+                        $tabquery->tablequery($result);
                     ?>
                 
          </form>

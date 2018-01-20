@@ -17,5 +17,4 @@ class Autenticazione{
                 header('Location: http://sensorlogicsystemlogin.altervista.org/index.php');
         }
   }
-}
-?>
+}
