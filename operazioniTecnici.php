@@ -1,10 +1,8 @@
 <?php
 	include_once 'Layout.php';
 	require 'config.php';
-    require 'nocsrf.php';
     require 'constants.php';
     include_once 'QueryRegistrazioneUtente.php';
-	$csrf = new nocsrf();
     $conn = '';
 	session_start();
     $email = $_SESSION['email'];
@@ -40,9 +38,8 @@
             if(isset($_POST['aggiungere'])===true){
             	
                $today= getdate();
-                $csrf= new nocsrf();
             	$aggiungiamm= new QueryRegistrazioneUtente();
-                $aggiungiamm->addutente($_POST['cf'],$_POST['cognome'],$_POST['nome'],$_POST['sesso'],$_POST['telefono'],$_POST['datadinascita'],$_POST['citta'],$_POST['indirizzo'],$_POST['numcivico'],$_POST['provincia'],$_POST['cap'],$today['year'].'-'.$today['mon'].'-'.$today['mday'], $_POST['email'], $csrf);
+                $aggiungiamm->addutente($_POST['cf'],$_POST['cognome'],$_POST['nome'],$_POST['sesso'],$_POST['telefono'],$_POST['datadinascita'],$_POST['citta'],$_POST['indirizzo'],$_POST['numcivico'],$_POST['provincia'],$_POST['cap'],$today['year'].'-'.$today['mon'].'-'.$today['mday'], $_POST['email'], 't');
                 
             }
         ?>
@@ -453,7 +450,7 @@
                 $cap= $_POST['cap2'];
                 $email= $_POST['email2'];
             	$modut= new QueryModificaUtente();
-                $modut-> modificaut($cf, $cognome, $nome, $sesso, $telefono, $datadinascita, $citta, $indirizzo, $numcivico,$provincia, $cap, $email );
+                $modut-> modificaut($cf, $cognome, $nome, $sesso, $telefono, $datadinascita, $citta, $indirizzo, $numcivico,$provincia, $cap, $email,$_POST['id2']);
         	}
         ?>
        	<br /><br />

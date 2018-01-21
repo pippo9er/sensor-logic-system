@@ -2,8 +2,9 @@
 
 class QueryRegistrazioneUtente{
 
-	function reginviomail($email,$psw, $csrf){
-    
+	function reginviomail($email,$psw){
+	require 'nocsrf.php';
+	$csrf = new nocsrf();
     		$str = '<span class="filtra">Registrazione riuscita</span>';
                         echo $str;
                         $nome_mittente = 'SensorLogicSystem';
@@ -29,9 +30,9 @@ class QueryRegistrazioneUtente{
                         }
     }
     
-    function addutente($cf, $cognome, $nome, $sesso, $telefono, $datadinascita, $citta, $indirizzo, $numcivico, $provincia, $cap, $dataregistrazione, $email, $csrf){
+    function addutente($cf, $cognome, $nome, $sesso, $telefono, $datadinascita, $citta, $indirizzo, $numcivico, $provincia, $cap, $dataregistrazione, $email,$permesso){
    				require 'config.php';
-                
+                session_start();
                 $query = sprintf("insert into utente (cf, cognome, nome, sesso, telefono, datadinascita, citta, indirizzo, numcivico, provincia, cap, dataregistrazione) values ('".$cf."','".$cognome."','".$nome."','".$sesso."','".$telefono."','".$datadinascita."','".$citta."','".$indirizzo."','".$numcivico."','".$provincia."',".$cap.",'".$dataregistrazione."')");
                	            
             	$conn = new mysqli($servername, $user, $pass, $database);
@@ -39,6 +40,7 @@ class QueryRegistrazioneUtente{
                 if($result !== false) {
                
                 	$query = sprintf("select id from utente where cf = '".$cf."'");
+                    
                 	$result = $conn->query($query);
                     $row = mysqli_fetch_row($result);
                     $id= $row[0];
@@ -50,11 +52,13 @@ class QueryRegistrazioneUtente{
        					$pass[] = $alphabet[$n];
    					}
    					$psw = implode($pass);
-                    $query = sprintf("insert into credenziale (email, password, permesso, utente) values ('".$email."','".$psw."','a',".$id.')');
+                    if(isset($_SESSION['email']) === true && isset($_SESSION['password']) === true ) {
+                    	$query = sprintf("insert into credenziale (email, password, permesso, utente) values ('%s','%s','%s','%s')",mysqli_real_escape_string($conn, $email),mysqli_real_escape_string($conn, $psw),mysqli_real_escape_string($conn, $permesso),mysqli_real_escape_string($conn, $id));
+                    }
                     $result = $conn->query($query);
                     if($result !== false) {
                     	$mailregistrazione= new QueryRegistrazioneUtente();
-                        $mailregistrazione->reginviomail($email, $psw, $csrf);
+                        $mailregistrazione->reginviomail($email, $psw);
                     } else {
                     	$query = sprintf("delete from utente where cf='".$cf."'");
                         $conn->query($query);
