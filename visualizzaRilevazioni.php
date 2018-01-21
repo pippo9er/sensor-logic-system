@@ -58,6 +58,7 @@
                 <tbody>
                     <?php
                     	require 'config.php';
+                        include_once 'Rilevazioni.php';
                         $conn = '';
                         $query = '';
                         session_start();
@@ -104,29 +105,12 @@
                             	$data1=substr($data,ZERO,QUATTRO).substr($data,CINQUE,DUE).substr($data,OTTO,DUE);
                                 $data2=substr($row[UNO],ZERO,QUATTRO).substr($row[UNO],QUATTRO,DUE).substr($row[UNO],SEI,DUE);
                                 if($data1===$data2){
-                                	$str = '<tr>';
-                                    $str = $str.'<td>'.htmlspecialchars($row[ZERO]).'</td>';
-                                    $str = $str.'<td>'.substr(htmlspecialchars($row[UNO]),ZERO,QUATTRO).'-'.substr(htmlspecialchars($row[UNO]),QUATTRO,DUE).'-'.substr(htmlspecialchars($row[UNO]),SEI,DUE).'</td>';
-                                    $str = $str.'<td>'.substr(htmlspecialchars($row[UNO]),OTTO,DUE).':'.substr(htmlspecialchars($row[UNO]),DIECI,DUE).'</td>';
-                                    $str = $str.'<td>'.substr(htmlspecialchars($row[UNO]),DODICI).'</td>';
-                                    $str = $str.'<td>'.htmlspecialchars($row[DUE]).'</td>';
-                                    $str = $str.'<td>'.htmlspecialchars($row[TRE]).'</td>';
-                                    $str = $str.'<td>'.htmlspecialchars($row[QUATTRO]).'</td>';
-                                    $str = $str.'<td>'.htmlspecialchars($row[CINQUE]).'</td>';
-                                    $str = $str.'</tr>';
-                                    echo $str;
+                                	$rilevazioni= new Rilevazioni();
+                                    $rilevazioni-> view($row);
                                 }
                             }else{
-                                $str = '<tr>';
-                                $str = $str.'<td>'.htmlspecialchars($row[ZERO]).'</td>';
-                                $str = $str.'<td>'.substr(htmlspecialchars($row[UNO]),ZERO,QUATTRO).'-'.substr(htmlspecialchars($row[UNO]),QUATTRO,DUE).'-'.substr(htmlspecialchars($row[UNO]),SEI,DUE).'</td>';
-                                $str = $str.'<td>'.substr(htmlspecialchars($row[UNO]),OTTO,DUE).':'.substr(htmlspecialchars($row[UNO]),DIECI,DUE).'</td>';
-                               	$str = $str.'<td>'.substr(htmlspecialchars($row[UNO]),DODICI).'</td>';
-                                $str = $str.'<td>'.htmlspecialchars($row[DUE]).'</td>';
-                                $str = $str.'<td>'.htmlspecialchars($row[TRE]).'</td>';
-                                $str = $str.'<td>'.htmlspecialchars($row[QUATTRO]).'</td>';
-                                $str = $str.'<td>'.htmlspecialchars($row[CINQUE]).'</td>';
-                                echo $str;
+                                $ril=new Rilevazioni();
+                                $ril-> view($row);
                             }
                         }
                     ?>                    

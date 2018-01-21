@@ -1,19 +1,11 @@
 <?php
 	require 'config.php';
     include_once 'QueryVisualizzaUtente.php';
-    $conn = '';
-	session_start();
-    $email = $_SESSION['email'];
-    $password = $_SESSION['password'];
-    if($conn === '') {
-    	$conn = new mysqli($servername, $user, $pass, $database);
-	}
-    $query = sprintf("SELECT * FROM credenziale where email='%s' and password='%s'",mysqli_real_escape_string($conn, $email),mysqli_real_escape_string($conn, $password));
-    $result = $conn->query($query);
-    if($result === false || $result->num_rows !== 1){
-    	    header('Location: http://sensorlogicsystemlogin.altervista.org/index.php');
-    }
-?>
+    include_once 'Autenticazione.php';
+    
+	$autentica= new Autenticazione();
+    $autentica-> autenticazione();
+    ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,14 +26,11 @@
          
           
                     	require 'config.php';
-                        $conn = '';   
-                        $query = '';
-                        $id=htmlspecialchars($_POST['id']);
-                        $nome=htmlspecialchars($_POST['nome']);
-                        $cognome=htmlspecialchars($_POST['cognome']);
-                        $email=htmlspecialchars($_POST['email']);
-                        $citta=htmlspecialchars($_POST['città']);
-                        $query = sprintf("select * from utente inner join credenziale on id=utente where permesso='a'");
+                        $conn='';
+                        $query='';
+            			$viewamm= new QueryVisualizzaUtente();
+                		$query=$viewamm->viewutente($_POST['id'],$_POST['nome'],$_POST['cognome'], $_POST['email'],$_POST['citta'], 'a');
+                
                         $visualamm= new QueryVisualizzaUtente();
                          $layoutS= new Layout();
                         $stampa = '';

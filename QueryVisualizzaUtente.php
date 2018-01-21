@@ -43,4 +43,16 @@ class QueryVisualizzaUtente{
                             echo $str;
                         }
     }
+    function viewutente($id, $nome, $cognome, $email,$citta, $permesso ){
+    require 'config.php';
+    				$conn = '';   
+                    $query = '';
+                    $id=htmlspecialchars($id);
+                    $nome=htmlspecialchars($nome);
+                    $cognome=htmlspecialchars($cognome);
+                    $email=htmlspecialchars($email);
+                    $citta=htmlspecialchars($citta);
+                    $query = sprintf("select * from utente inner join credenziale on id=utente where permesso='".$permesso."'");
+                    return $query;
+    }
 }

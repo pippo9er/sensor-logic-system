@@ -1,18 +1,10 @@
 <?php
 	require 'config.php';
     include_once'QueryVisualizzaUtente.php';
-	session_start();
-    $conn = '';
-    $email = $_SESSION['email'];
-    $password = $_SESSION['password'];
-    if($conn === '') {
-        $conn = new mysqli($servername, $user, $pass, $database);
-    }
-    $query = sprintf("SELECT * FROM credenziale where email='%s' and password='%s'",mysqli_real_escape_string($conn, $email),mysqli_real_escape_string($conn, $password));
-    $result = $conn->query($query);
-    if($result === false || $result->num_rows !== 1){
-    	    header('Location: http://sensorlogicsystemlogin.altervista.org/index.php');
-    }
+    include_once 'Autenticazione.php';
+    
+	$autentica= new Autenticazione();
+    $autentica-> autenticazione();
 ?>
 <!DOCTYPE html>
 <html>
@@ -37,11 +29,10 @@
                     	require 'config.php';
                         $conn = '';
                         $query = '';
-                        $id=htmlspecialchars($_POST['id']);
-                        $nome=htmlspecialchars($_POST['nome']);
-                        $cognome=htmlspecialchars($_POST['cognome']);
-                        $email=htmlspecialchars($_POST['email']);
-                        $citta=htmlspecialchars($_POST['città']);
+                      
+            			$viewamm= new QueryVisualizzaUtente();
+                		$query=$viewamm->viewutente($_POST['id'],$_POST['nome'],$_POST['cognome'], $_POST['email'],$_POST['citta'], 'u');
+                
                         $layoutS= new Layout();
                         $stampa = '';
                         if($stampa === '') {
@@ -51,7 +42,7 @@
                         if($conn === '') {
                             $conn = new mysqli($servername, $user, $pass, $database);
                         }
-                        $query = sprintf("select * from utente inner join credenziale on id=utente where permesso='u'");
+                        
                        	$visualcli= new QueryVisualizzaUtente();
                         if(isset($query) === true) {
                         	$query= $visualcli-> visualizzaut($query, mysqli_real_escape_string($conn, $id),mysqli_real_escape_string($conn, $nome),mysqli_real_escape_string($conn, $cognome), mysqli_real_escape_string($conn, $email), mysqli_real_escape_string($conn, $citta));
