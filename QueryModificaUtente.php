@@ -16,4 +16,23 @@ class QueryModificaUtente{
                     echo $str;
                 }
 	}
+    
+    function savedata($cf2, $cognome2, $nome2, $sesso2, $telefono2, $datadinascita2, $citta2, $indirizzo2, $numcivico2, $provincia2, $cap2, $email2){
+    	
+            	$cf = $cf2;
+                $cognome= $cognome2;
+                $nome= $nome2;
+                $sesso= $sesso2;
+                $telefono= $telefono2;
+                $datadinascita= $datadinascita2;
+                $citta=$citta2;
+                $indirizzo=$indirizzo2;
+                $numcivico= $numcivico2;
+                $provincia= $provincia2;
+                $cap= $cap2;
+                $email= $email2;
+                $modut= new QueryModificaUtente();
+                $modut-> modificaut($cf, $cognome, $nome, $sesso, $telefono, $datadinascita, $citta, $indirizzo, $numcivico,$provincia, $cap, $email, $_POST['id2']);
+        	
+    }
 }

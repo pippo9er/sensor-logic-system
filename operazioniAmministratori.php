@@ -421,22 +421,12 @@
         <?php
         	require 'config.php';
             include_once 'QueryModificaUtente.php';
+                           
         	if(isset($_POST['salvare'])===true){
-            	$cf = $_POST['cf2'];
-                $cognome= $_POST['cognome2'];
-                $nome= $_POST['nome2'];
-                $sesso= $_POST['sesso2'];
-                $telefono= $_POST['telefono2'];
-                $datadinascita= $_POST['datadinascita2'];
-                $citta=$_POST['citta2'];
-                $indirizzo=$_POST['indirizzo2'];
-                $numcivico= $_POST['numcivico2'];
-                $provincia= $_POST['provincia2'];
-                $cap= $_POST['cap2'];
-                $email= $_POST['email2'];
-            	$modut= new QueryModificaUtente();
-                $modut-> modificaut($cf, $cognome, $nome, $sesso, $telefono, $datadinascita, $citta, $indirizzo, $numcivico,$provincia, $cap, $email, $_POST['id2']);
-        	}
+                $save= new QueryModificaUtente();
+                $save-> savedata($_POST['cf2'],$_POST['cognome2'],$_POST['nome2'], $_POST['sesso2'],$_POST['telefono2'],$_POST['datadinascita2'],$_POST['citta2'],$_POST['indirizzo2'], $_POST['numcivico2'],$_POST['provincia2'], $_POST['cap2'],$_POST['email2']);
+
+            	}
         ?>
        	<br /><br />
     	<button class="buttfiltro" name="salvare" value="salvare" type="submit" id="salvare" 
