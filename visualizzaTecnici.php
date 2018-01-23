@@ -29,10 +29,10 @@ require 'config.php';
                         if($conn === '') {
                             $conn = new mysqli($servername, $user, $pass, $database);
                         }
-            			$viewamm= new QueryVisualizzaUtente();
-                		$query=$viewamm->viewutente(mysqli_real_escape_string($conn, $_POST['id']),mysqli_real_escape_string($conn, $_POST['nome']),mysqli_real_escape_string($conn, $_POST['cognome']), mysqli_real_escape_string($conn, $_POST['email']),mysqli_real_escape_string($conn, $_POST['citta']), 't');
+            			$viewtec= new QueryVisualizzaUtente();
+                		$query=$viewtec->viewutente(mysqli_real_escape_string($conn, $_POST['id']),mysqli_real_escape_string($conn, $_POST['nome']),mysqli_real_escape_string($conn, $_POST['cognome']), mysqli_real_escape_string($conn, $_POST['email']),mysqli_real_escape_string($conn, $_POST['citta']), 't');
                 		
-                        $visualamm= new QueryVisualizzaUtente();
+                        $visualtec= new QueryVisualizzaUtente();
                          $layoutS= new Layout();
                         $stampa = '';
                         if($stampa === '') {
@@ -40,7 +40,7 @@ require 'config.php';
                         }
                         echo $stampa;
                         if(isset($query) === true) {
-                        	$query= $visualamm-> visualizzaut($query, mysqli_real_escape_string($conn, $_POST['id']),mysqli_real_escape_string($conn, $_POST['nome']),mysqli_real_escape_string($conn, $_POST['cognome']), mysqli_real_escape_string($conn, $_POST['email']), mysqli_real_escape_string($conn, $_POST['citta']));
+                        	$query= $visualtec-> visualizzaut($query, mysqli_real_escape_string($conn, $_POST['id']),mysqli_real_escape_string($conn, $_POST['nome']),mysqli_real_escape_string($conn, $_POST['cognome']), mysqli_real_escape_string($conn, $_POST['email']), mysqli_real_escape_string($conn, $_POST['citta']));
 						}            
 						
                         $result = '';
