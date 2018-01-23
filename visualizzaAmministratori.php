@@ -28,23 +28,23 @@
                     	require 'config.php';
                         $conn='';
                         $query='';
+                        if($conn === '') {
+                            $conn = new mysqli($servername, $user, $pass, $database);
+                        }
             			$viewamm= new QueryVisualizzaUtente();
-                		$query=$viewamm->viewutente($_POST['id'],$_POST['nome'],$_POST['cognome'], $_POST['email'],$_POST['citta'], 'a');
-                
+                		$query=$viewamm->viewutente(mysqli_real_escape_string($conn, $_POST['id']),mysqli_real_escape_string($conn, $_POST['nome']),mysqli_real_escape_string($conn, $_POST['cognome']), mysqli_real_escape_string($conn, $_POST['email']),mysqli_real_escape_string($conn, $_POST['citta']), 'a');
+                		
                         $visualamm= new QueryVisualizzaUtente();
                          $layoutS= new Layout();
                         $stampa = '';
                         if($stampa === '') {
-                          $stampa = $layoutS->layoutSearch($id, $nome, $cognome, $email, $citta);
+                          $stampa = $layoutS->layoutSearch(htmlspecialchars($_POST['id']), htmlspecialchars($_POST['nome']), htmlspecialchars($_POST['cognome']), htmlspecialchars($_POST['email']), htmlspecialchars($_POST['citta']));
                         }
                         echo $stampa;
-                        if($conn === '') {
-                            $conn = new mysqli($servername, $user, $pass, $database);
-                        }
                         if(isset($query) === true) {
-                        	$query= $visualamm-> visualizzaut($query, mysqli_real_escape_string($conn, $id),mysqli_real_escape_string($conn, $nome),mysqli_real_escape_string($conn, $cognome), mysqli_real_escape_string($conn, $email), mysqli_real_escape_string($conn, $citta));
+                        	$query= $visualamm-> visualizzaut($query, mysqli_real_escape_string($conn, $_POST['id']),mysqli_real_escape_string($conn, $_POST['nome']),mysqli_real_escape_string($conn, $_POST['cognome']), mysqli_real_escape_string($conn, $_POST['email']), mysqli_real_escape_string($conn, $_POST['citta']));
 						}            
-
+						
                         $result = '';
                         if(isset($_SESSION['email']) === true && isset($_SESSION['password']) === true ) {
                         	$result = $conn->query($query);

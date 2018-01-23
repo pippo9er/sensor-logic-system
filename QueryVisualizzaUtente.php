@@ -19,6 +19,7 @@ class QueryVisualizzaUtente{
                            	$query = $query.sprintf(" and citta = '%s'",$citta);
                         }
                          $query=$query.sprintf(' order by utente.id');
+                         
          return $query;
     }
     function tablequery($result){
@@ -45,7 +46,6 @@ class QueryVisualizzaUtente{
     }
     function viewutente($id, $nome, $cognome, $email,$citta, $permesso ){
     require 'config.php';
-    				$conn = '';   
                     $query = '';
                     $id=htmlspecialchars($id);
                     $nome=htmlspecialchars($nome);

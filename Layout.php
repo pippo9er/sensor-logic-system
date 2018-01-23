@@ -114,7 +114,7 @@ class Layout{
           $var=$var.'<input class="inputfiltro" type="text" placeholder="Nome" id="nome" name="nome" maxlength="50" value="'.$nome.'" pattern= "[A-Za-z]{0,50}" title="Deve essere composto da sole lettere" />';
           $var=$var.'<input class="inputfiltro" type="text" placeholder="Cognome" id="cognome" name="cognome" maxlength="50" value="'.$cognome.'" pattern= "[A-Za-z]{0,50}" title="Deve essere composto da sole lettere" />';
           $var=$var.'<input class="inputfiltro" type="text" placeholder="Email" id="email" name="email" maxlength="50" value="'.$email.'"  pattern="[^@]+@[^@]+\.[a-zA-Z]{2,6}" title="Deve rispettare il formato: email@dominio.com"/>';
-          $var=$var.'<input class="inputfiltro" type="text" placeholder="Città" id="città" name="città" maxlength="50" value="'.$citta.'" pattern= "[A-Za-z]{0,50}" title="Deve essere composta da sole lettere" />';
+          $var=$var.'<input class="inputfiltro" type="text" placeholder="Città" id="citta" name="citta" maxlength="50" value="'.$citta.'" pattern= "[A-Za-z]{0,50}" title="Deve essere composta da sole lettere" />';
           $var=$var.'<button class="buttfiltro" name="filtro" value="filtro" type="submit" id="filtro">Ricerca</button>';
           $var=$var.'<div class="positiontable">';
            $var=$var.'<table class="tabellaClienti">';
